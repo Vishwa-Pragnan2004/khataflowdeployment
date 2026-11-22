@@ -1,7 +1,7 @@
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -9,15 +9,15 @@ generator client {
 }
 
 model Shop {
-  id          Int     @id @default(autoincrement())
-  name        String
-  ownerName   String
-  upiId       String
-  phone       String  @default("")
-  email       String  @default("")
-  address     String  @default("")
-  gstin       String?
-  paymentTerms Int    @default(15)
+  id           Int     @id @default(autoincrement())
+  name         String
+  ownerName    String
+  upiId        String
+  phone        String  @default("")
+  email        String  @default("")
+  address      String  @default("")
+  gstin        String?
+  paymentTerms Int     @default(15)
 }
 
 model Customer {
@@ -31,33 +31,33 @@ model Customer {
 }
 
 model Bill {
-  id         Int          @id @default(autoincrement())
-  billNumber String       @unique
-  customerId Int
-  customer   Customer     @relation(fields: [customerId], references: [id])
-  itemsNote  String?
-  totalAmount Int
-  billDate   DateTime
-  dueDate    DateTime
-  createdAt  DateTime     @default(now())
-  status     String       @default("SENT")
-  termsDays  Int          @default(15)
-  subtotal   Int          @default(0)
-  discount   Int          @default(0)
-  notes      String?
-  sentAt     DateTime?
-  shareToken String?      @unique
+  id           Int           @id @default(autoincrement())
+  billNumber   String        @unique
+  customerId   Int
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  itemsNote    String?
+  totalAmount  Int
+  billDate     DateTime
+  dueDate      DateTime
+  createdAt    DateTime      @default(now())
+  status       String        @default("SENT")
+  termsDays    Int           @default(15)
+  subtotal     Int           @default(0)
+  discount     Int           @default(0)
+  notes        String?
+  sentAt       DateTime?
+  shareToken   String?       @unique
   promisedDate DateTime?
-  payments   Payment[]
-  reminders  ReminderLog[]
-  items      BillItem[]
-  activities ActivityLog[]
+  payments     Payment[]
+  reminders    ReminderLog[]
+  items        BillItem[]
+  activities   ActivityLog[]
 }
 
 model BillItem {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   billId      Int
-  bill        Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  bill        Bill   @relation(fields: [billId], references: [id], onDelete: Cascade)
   description String
   qty         Int
   unitPrice   Int
@@ -114,4 +114,3 @@ model Product {
   pricePerUnit Int
   createdAt    DateTime @default(now())
 }
-
